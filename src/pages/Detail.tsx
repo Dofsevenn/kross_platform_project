@@ -18,7 +18,6 @@ import CommentsCard from "../components/CommentsCard";
 const Detail= (props: any) => {
 
     const post: IPost = props.location?.state?.post;
-    //const comments: IComments = props.location?.state?.post.comments;
 
     if (!post) {
         return <div></div>
@@ -31,7 +30,7 @@ const Detail= (props: any) => {
                     <IonButtons slot="start">
                         <IonBackButton/>
                     </IonButtons>
-                    <IonTitle>TDSGram</IonTitle>
+                    <IonTitle>POST</IonTitle>
                 </IonToolbar>
             </IonHeader>
             <IonContent fullscreen>
@@ -45,7 +44,6 @@ const Detail= (props: any) => {
                         }
                     </IonList>
                 </IonCard>
-                {/*<CommentsCard key={i} {...comment} />*/}
             </IonContent>
         </IonPage>
     )

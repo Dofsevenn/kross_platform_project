@@ -1,11 +1,22 @@
-import {IonButton, IonButtons, IonContent, IonHeader, IonLabel, IonPage, IonTitle, IonToolbar} from '@ionic/react';
+import {
+    IonBackButton,
+    IonButton,
+    IonButtons,
+    IonContent,
+    IonHeader,
+    IonLabel,
+    IonPage,
+    IonTitle,
+    IonToolbar
+} from '@ionic/react';
 import React, {useState} from 'react';
-import {Link} from "react-router-dom";
+import {Link, useHistory} from "react-router-dom";
 import IPost from "../modules/IPost";
 import PostCard from "../components/postCard";
 import gql from 'graphql-tag';
 import {useQuery} from "@apollo/client";
 import IPostList from "../modules/IPostList";
+import styled from "styled-components";
 
 const GET_POSTS = gql`
     query{
@@ -28,6 +39,7 @@ const GET_POSTS = gql`
 `;
 
 const Home = () => {
+    let history = useHistory();
     const {loading, data } = useQuery<IPostList>(GET_POSTS);
 
     if (loading) {
@@ -93,9 +105,13 @@ const Home = () => {
         <IonPage>
             <IonHeader>
                 <IonToolbar>
-                    <IonTitle>TDSGram</IonTitle>
+                    <IonButtons slot="start">
+                        <IonBackButton/>
+                    </IonButtons>
+                    <IonTitle>POST FEED</IonTitle>
                     <IonButtons slot="end">
                         {/* <IonButton onClick={handleClick}> + </IonButton> */}
+                        <PictureButton onClick={() => history.replace("/newPost")}>Ny post</PictureButton>
                     </IonButtons>
                 </IonToolbar>
             </IonHeader>
@@ -116,5 +132,13 @@ const Home = () => {
         </IonPage>
     );
 };
+
+const PictureButton = styled(IonButton)`
+  &::part(native) {
+    background-color: darkgreen;
+    border-radius: 5px;
+    color: white;
+  }
+`;
 
 export default Home;

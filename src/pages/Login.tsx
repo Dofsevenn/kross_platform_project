@@ -1,15 +1,16 @@
 import React, {useState} from 'react';
 import {
-    IonButton,
     IonCard,
-    IonContent, IonFabButton,
-    IonHeader, IonIcon,
+    IonContent,
+    IonFabButton,
+    IonIcon,
     IonInput,
     IonItem,
     IonList,
-    IonPage, IonSpinner,
-    IonTitle, IonToast,
-    IonToolbar, useIonViewWillEnter
+    IonPage,
+    IonSpinner,
+    IonToast,
+    useIonViewWillEnter
 } from "@ionic/react";
 import {auth} from "../utils/nhost";
 import {useHistory} from "react-router-dom";
@@ -98,7 +99,7 @@ const IonContentStyled = styled(IonContent)`
 const PageTitle = styled.h1`
   font-size: 3rem;
   align-self: center;
-  color: #37323E;
+  color: black;
   font-family: 'Quicksand', sans-serif;
 `;
 
