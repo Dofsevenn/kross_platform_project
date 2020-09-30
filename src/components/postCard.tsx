@@ -1,6 +1,7 @@
 import React from 'react';
 import {IonCard, IonCardContent, IonCardHeader, IonCardSubtitle, IonCardTitle} from "@ionic/react";
 import IPost from "../modules/IPost";
+import {storage} from "../utils/nhost";
 
 
 const PostCard = ({ id, description, title, user}: IPost) => {

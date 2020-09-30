@@ -15,6 +15,21 @@ import {CameraResultType} from "@capacitor/core";
 import styled from "styled-components";
 import {storage} from "../utils/nhost";
 
+const useImageUpload = () => {
+    const [uploadProgress, setUploadProgress] = useState(0);
+    const startUploading = async ({ base64String, filenameWithExtension }: {
+        base64String: string, filenameWithExtension: string }) => {
+        await storage.putString(`/public/${filenameWithExtension}`,
+            base64String, "data_url", null, (pe: ProgressEvent) => {
+                setUploadProgress((pe.loaded / pe.total) * 100);
+            });
+    }
+    return {
+        startUploading,
+        uploadProgress
+    }
+}
+
 const NewPost = () => {
 
     const {photo, getPhoto} = useCamera();
@@ -26,28 +41,12 @@ const NewPost = () => {
             resultType: CameraResultType.DataUrl
         });
     };
-
+/*
     const uploadImage = async () => {
         await storage.putString(`/public/test1.jpeg`, (photo?.dataUrl as string),
             "data_url", null, (pe: ProgressEvent) => {
                 console.log(pe.loaded);
             });
-    }
-/*
-    const useImageUpload = () => {
-        const [uploadProgress, setUploadProgress] = useState(0);
-
-        const startUploading = async ({ base64String, filenameWithExtension }: {base64String: String,
-            filenameWithExtension: string }) => {
-
-            await storage.putString(`/public/${filenameWithExtension}`, (base64String as string),
-                "data_url", null, (pe: ProgressEvent) => {
-                    setUploadProgress((pe.loaded / pe.total) * 100);
-                });
-        } return {
-            startUploading,
-            uploadProgress
-        }
     } */
 
     return(
@@ -65,7 +64,7 @@ const NewPost = () => {
                     <img src={photo?.dataUrl}/>
                     <div>
                         <PictureButton onClick={triggerCamera}>Ta Bilde</PictureButton>
-                        <PictureButton onClick={uploadImage}>Last opp bilde</PictureButton>
+                        <PictureButton onClick={useImageUpload}>Last opp bilde</PictureButton>
                     </div>
                 </LoginCard>
             </IonContentStyled>
