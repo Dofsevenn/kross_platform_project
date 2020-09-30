@@ -111,7 +111,7 @@ const Home = () => {
                     <IonTitle>POST FEED</IonTitle>
                     <IonButtons slot="end">
                         {/* <IonButton onClick={handleClick}> + </IonButton> */}
-                        <PictureButton onClick={() => history.replace("/newPost")}>Ny post</PictureButton>
+                        <PictureButton onClick={() => history.push("/newPost")}>Ny post</PictureButton>
                     </IonButtons>
                 </IonToolbar>
             </IonHeader>
