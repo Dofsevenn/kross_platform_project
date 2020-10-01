@@ -33,6 +33,7 @@ const useImageUpload = () => {
 const NewPost = () => {
 
     const {photo, getPhoto} = useCamera();
+    const {startUploading, uploadProgress} = useImageUpload();
 
     const triggerCamera = async () => {
         await getPhoto({
@@ -48,6 +49,12 @@ const NewPost = () => {
                 console.log(pe.loaded);
             });
     } */
+    const uploadImage = async () => {
+        await startUploading({
+            base64String: photo?.dataUrl,
+            filenameWithExtension: `${Date.now().toString()}.jpeg`
+        })
+    }
 
     return(
         <IonPage>
@@ -64,7 +71,7 @@ const NewPost = () => {
                     <img src={photo?.dataUrl}/>
                     <div>
                         <PictureButton onClick={triggerCamera}>Ta Bilde</PictureButton>
-                        <PictureButton onClick={useImageUpload}>Last opp bilde</PictureButton>
+                        <PictureButton onClick={uploadImage}>Last opp bilde</PictureButton>
                     </div>
                 </LoginCard>
             </IonContentStyled>
