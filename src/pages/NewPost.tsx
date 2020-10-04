@@ -51,7 +51,7 @@ const NewPost = () => {
     } */
     const uploadImage = async () => {
         await startUploading({
-            base64String: photo?.dataUrl,
+            base64String: photo?.dataUrl!,
             filenameWithExtension: `${Date.now().toString()}.jpeg`
         })
     }
