@@ -3,7 +3,7 @@ import {
     IonButton,
     IonButtons,
     IonContent,
-    IonHeader,
+    IonHeader, IonIcon,
     IonLabel,
     IonPage,
     IonTitle,
@@ -17,6 +17,8 @@ import gql from 'graphql-tag';
 import {useQuery} from "@apollo/client";
 import IPostList from "../modules/IPostList";
 import styled from "styled-components";
+import {exitOutline} from 'ionicons/icons';
+import {auth} from "../utils/nhost";
 
 const GET_POSTS = gql`
     query{
@@ -24,6 +26,7 @@ const GET_POSTS = gql`
             id
             title
             description
+            image_filename
             user{
                 display_name
             }
@@ -101,12 +104,23 @@ const Home = () => {
         setPosts(posts => [post, ...posts])
     } */
 
+    const logout = async () => {
+        try {
+            await auth.logout();
+            history.replace("/login")
+        } catch (e) {
+            alert("Something went wrong. You are not logged out")
+        }
+    }
+
     return (
         <IonPage>
             <IonHeader>
                 <IonToolbar>
                     <IonButtons slot="start">
-                        <IonBackButton/>
+                        <IonButton onClick={logout}>
+                            <IonIcon icon={exitOutline}></IonIcon>
+                        </IonButton>
                     </IonButtons>
                     <IonTitle>POST FEED</IonTitle>
                     <IonButtons slot="end">

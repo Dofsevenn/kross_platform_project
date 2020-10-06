@@ -4,6 +4,7 @@ interface IPost {
     id: number;
     title: string;
     description: string;
+    image_filename: string;
     user: {
         display_name: string
     };

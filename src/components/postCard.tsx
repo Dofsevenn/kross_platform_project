@@ -4,11 +4,11 @@ import IPost from "../modules/IPost";
 import {storage} from "../utils/nhost";
 
 
-const PostCard = ({ id, description, title, user}: IPost) => {
+const PostCard = ({ id, description, title, user, image_filename}: IPost) => {
 
     return (
         <IonCard >
-             <img src={"assets/hein.jpg"} width="400" height="300"/>
+             <img src={`https://backend-iw3hrary.nhost.app/storage/o/public/${image_filename}`} width="400" height="300"/>
             <IonCardHeader>
                 <IonCardSubtitle>
                     @ {user.display_name} &bull; ? likes

@@ -30,7 +30,7 @@ const Login = () => {
 
     useIonViewWillEnter(() => {
         if (auth.isAuthenticated()) {
-            /* history.replace("/home"); */
+            history.replace("/home");
         }
     })
 
