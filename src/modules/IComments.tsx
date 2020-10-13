@@ -6,8 +6,8 @@ interface IComments {
         display_name: string;
     }
     /*
-    date: string;
-    profileImageUrl?: string; */
+    date: string; */
+    profileImageUrl?: string;
 }
 
 export default IComments;

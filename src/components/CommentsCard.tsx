@@ -3,12 +3,12 @@ import {IonAvatar, IonCard, IonItem, IonLabel, IonList} from "@ionic/react";
 import IPost from "../modules/IPost";
 import IComments from "../modules/IComments";
 
-const CommentsCard = ({ id, text, user }: IComments) => {
+const CommentsCard = ({ id, text, user, profileImageUrl }: IComments) => {
 
     return(
         <IonItem >
             <IonAvatar slot="start">
-                {/* <img src={profileImageUrl} /> */}
+                {<img src={profileImageUrl} />}
             </IonAvatar>
             <IonLabel>
                 {/*<h3>{date}</h3>*/}

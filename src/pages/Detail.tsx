@@ -1,9 +1,9 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {
     IonAvatar, IonBackButton, IonButton, IonButtons,
     IonCard,
     IonContent,
-    IonHeader, IonIcon,
+    IonHeader, IonIcon, IonInput,
     IonItem,
     IonLabel,
     IonList,
@@ -13,19 +13,106 @@ import {
 } from "@ionic/react";
 import PostCard from "../components/postCard";
 import IPost from "../modules/IPost";
+import ICommentList from "../modules/ICommentList";
 import CommentsCard from "../components/CommentsCard";
 import {trashOutline} from "ionicons/icons";
 import {auth} from "../utils/nhost";
+import {gql} from "@apollo/client/core";
+import {useMutation, useQuery} from "@apollo/client";
+import styled from "styled-components";
+
+const GET_COMMENTS = gql`
+    query getCommentsByPostID($post_id: Int!) {
+        posts_by_pk(id: $post_id) {
+            comments {
+                text
+                user {
+                    display_name
+                }
+            }
+        }
+    }
+`;
+
+const INSERT_COMMENT = gql`    
+    mutation InsertComment($comment: comments_insert_input!) {
+        insert_comments_one(object: $comment) {
+            user_id,
+            post_id,
+            text
+        }
+    }
+`;
+
+const DELETE_POST = gql`
+    mutation DeletePost($post_id: Int!) {
+        delete_comments(
+            where: {
+                post_id: {
+                    _eq: $post_id
+                }
+            }
+        ) {
+            affected_rows
+        }
+        delete_posts_by_pk(
+            id: $post_id
+        ) {
+            id
+        }
+    }
+`;
 
 const Detail= (props: any) => {
 
     const post: IPost = props.location?.state?.post;
 
+    const [comment, setComment] = useState<string>("");
+    const [insertCommentMutation] = useMutation(INSERT_COMMENT);
+    const [deletePostMutation] = useMutation(DELETE_POST);
+
+    const { loading, data } = useQuery<ICommentList>(GET_COMMENTS, {
+        variables: {
+            post_id: post?.id
+        },
+        fetchPolicy: "no-cache"
+    });
+
     if (!post) {
         return <div></div>
     }
 
-    // "trash-outline"
+    if (loading) { return <IonLabel>Laster kommentarer!</IonLabel> }
+
+    const insertComment = async () => {
+        try {
+            await insertCommentMutation({
+                variables: {
+                    comment: {
+                        post_id: post?.id,
+                        user_id: auth.getClaim('x-hasura-user-id'),
+                        text: comment
+                    }
+                }
+            })
+        } catch (e) {
+            console.warn(e);
+        }
+    }
+
+    const deletePost = async () => {
+        try {
+            await deletePostMutation({
+                variables: {
+                    post_id: post.id
+                }
+            })
+
+        } catch (e) {
+            console.warn(e)
+        }
+    }
+    // Kode opp bruker registrering som øvelse til neste gang
     return(
         <IonPage>
             <IonHeader>
@@ -37,7 +124,7 @@ const Detail= (props: any) => {
                     {
                         post.user.id === auth.getClaim('x-hasura-user-id') &&
                             <IonButtons slot="end">
-                                <IonButton onClick={() => alert(`slett id ${post.id}`)}>
+                                <IonButton onClick={deletePost}>
                                     <IonIcon icon={trashOutline}/>
                                 </IonButton>
                             </IonButtons>
@@ -53,6 +140,17 @@ const Detail= (props: any) => {
                                 <CommentsCard key={i} {...comment} />
                             ))
                         }
+                    </IonList>
+                </IonCard>
+                <IonCard>
+                    <IonList>
+                        <IonItem>
+                            <IonInput placeholder={"Skriv inn en kommentar"}
+                                      onIonInput={(e:any) => setComment(e.target.value)}/>
+                        </IonItem>
+                        <IonItem>
+                            <IonButton onClick={insertComment}>Legg til kommentar</IonButton>
+                        </IonItem>
                     </IonList>
                 </IonCard>
             </IonContent>

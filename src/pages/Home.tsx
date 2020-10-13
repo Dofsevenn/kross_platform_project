@@ -28,13 +28,13 @@ const GET_POSTS = gql`
             description
             image_filename
             user{
+                id
                 display_name
             }
             comments{
                 id
                 text
                 user{
-                    id
                     display_name
                 }
             }
