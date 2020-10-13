@@ -34,6 +34,7 @@ const GET_POSTS = gql`
                 id
                 text
                 user{
+                    id
                     display_name
                 }
             }
