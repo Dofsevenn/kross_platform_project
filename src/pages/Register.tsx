@@ -32,14 +32,15 @@ const Register = () => {
     const [emailAddress, setEmailAddress] = useState<string>("");
     const [password, setPassword] = useState<string>("");
     const [showErrorToast, setShowErrorToast] = useState<boolean>(false);
-    //const [showRegisterToast, setShowRegisterToast] = useState<boolean>(false);
+    const [showRegisterToast, setShowRegisterToast] = useState<boolean>(false);
 
     // auth.register(email, password, { display_name: "Joe Doe" });
 
     const registerUser = async () => {
         try {
             await auth.register(emailAddress, password);
-            history.replace("/login"); //Funker ikke
+            history.replace("/home");
+            setShowRegisterToast(true);
         } catch (exception) {
             console.error(exception)
             setShowErrorToast(true);
@@ -77,7 +78,13 @@ const Register = () => {
                 {<IonToast
                     isOpen={showErrorToast}
                     onDidDismiss={() => setShowErrorToast(false)}
-                    message={"Du må fylle inn skjemaet først"}
+                    message={"Du må fylle ut skjemaet først, eventuelt bruker eksisterer allerede."}
+                    duration={3000}
+                    color="warning"/> }
+                {<IonToast
+                    isOpen={showRegisterToast}
+                    onDidDismiss={() => setShowRegisterToast(false)}
+                    message={"Registrering var vellykket"}
                     duration={3000}
                     color="warning"/> }
             </IonContentStyled>
