@@ -8,7 +8,7 @@ const CommentsCard = ({ id, text, user, profileImageUrl }: IComments) => {
     return(
         <IonItem >
             <IonAvatar slot="start">
-                {<img src={profileImageUrl} />}
+                { <img src={profileImageUrl} />}
             </IonAvatar>
             <IonLabel>
                 {/*<h3>{date}</h3>*/}

@@ -18,11 +18,12 @@ import CommentsCard from "../components/CommentsCard";
 import {trashOutline} from "ionicons/icons";
 import {auth} from "../utils/nhost";
 import {gql} from "@apollo/client/core";
-import {useMutation, useQuery} from "@apollo/client";
+import {useMutation, useSubscription} from "@apollo/client";
 import styled from "styled-components";
+import {useHistory} from "react-router-dom";
 
 const GET_COMMENTS = gql`
-    query getCommentsByPostID($post_id: Int!) {
+    subscription getCommentsByPostID($post_id: Int!) {
         posts_by_pk(id: $post_id) {
             comments {
                 text
@@ -65,13 +66,14 @@ const DELETE_POST = gql`
 
 const Detail= (props: any) => {
 
+    let history = useHistory()
     const post: IPost = props.location?.state?.post;
 
     const [comment, setComment] = useState<string>("");
     const [insertCommentMutation] = useMutation(INSERT_COMMENT);
     const [deletePostMutation] = useMutation(DELETE_POST);
 
-    const { loading, data } = useQuery<ICommentList>(GET_COMMENTS, {
+    const { loading, data } = useSubscription<ICommentList>(GET_COMMENTS, {
         variables: {
             post_id: post?.id
         },
@@ -107,6 +109,7 @@ const Detail= (props: any) => {
                     post_id: post.id
                 }
             })
+            history.replace("/home"); //Den  går til home siden men rendrer ikke home siden..???
 
         } catch (e) {
             console.warn(e)

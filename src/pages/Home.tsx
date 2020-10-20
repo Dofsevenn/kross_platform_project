@@ -14,14 +14,14 @@ import {Link, useHistory} from "react-router-dom";
 import IPost from "../modules/IPost";
 import PostCard from "../components/postCard";
 import gql from 'graphql-tag';
-import {useQuery} from "@apollo/client";
+import {useSubscription} from "@apollo/client";
 import IPostList from "../modules/IPostList";
 import styled from "styled-components";
 import {exitOutline} from 'ionicons/icons';
 import {auth} from "../utils/nhost";
 
 const GET_POSTS = gql`
-    query{
+    subscription {
         posts{
             id
             title
@@ -44,7 +44,8 @@ const GET_POSTS = gql`
 
 const Home = () => {
     let history = useHistory();
-    const {loading, data } = useQuery<IPostList>(GET_POSTS);
+    const {loading, data } = useSubscription<IPostList>(GET_POSTS,
+        { fetchPolicy: 'no-cache', });
 
     if (loading) {
         return <IonLabel>Laster...</IonLabel>

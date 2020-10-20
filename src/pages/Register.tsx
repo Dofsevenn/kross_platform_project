@@ -1,59 +1,63 @@
-import React, {useState} from 'react';
+import React, {useState} from "react";
 import {
+    IonBackButton,
     IonButton,
+    IonButtons,
     IonCard,
     IonContent,
     IonFabButton,
-    IonIcon,
+    IonHeader, IonIcon,
     IonInput,
     IonItem,
     IonList,
     IonPage,
-    IonSpinner,
-    IonToast,
-    useIonViewWillEnter
+    IonTitle, IonToast,
+    IonToolbar
 } from "@ionic/react";
-import {auth} from "../utils/nhost";
-import {useHistory} from "react-router-dom";
-import styled from "styled-components"
-import {arrowForwardCircle, text} from "ionicons/icons";
-import {renderToStaticMarkup} from "react-dom/server";
+import styled from "styled-components";
+
 import WaveBlob from "../components/WaveBlob";
+import {renderToStaticMarkup} from "react-dom/server";
+import {auth} from "../utils/nhost";
+import { personAddOutline} from "ionicons/icons";
+import {useHistory} from "react-router-dom";
 
 const waveBlobString = encodeURIComponent(renderToStaticMarkup(<WaveBlob/>))
 
-const Login = () => {
+
+const Register = () => {
+
     let history = useHistory()
+
     const [emailAddress, setEmailAddress] = useState<string>("");
     const [password, setPassword] = useState<string>("");
-    const [isAuthenticating, setIsAuthenticating] = useState<boolean>(false);
     const [showErrorToast, setShowErrorToast] = useState<boolean>(false);
+    //const [showRegisterToast, setShowRegisterToast] = useState<boolean>(false);
 
-    useIonViewWillEnter(() => {
-        if (auth.isAuthenticated()) {
-            history.replace("/home");
-        }
-    })
+    // auth.register(email, password, { display_name: "Joe Doe" });
 
-    const authenticateUser = async () => {
-        setIsAuthenticating(true);
+    const registerUser = async () => {
         try {
-            await auth.login(emailAddress, password);
-            history.push("/home"); // Har push her nå bare for enkelt å komme tilbake til login. Skal være .replace
-            setIsAuthenticating(false);
+            await auth.register(emailAddress, password);
+            history.replace("/login"); //Funker ikke
         } catch (exception) {
-            console.log(exception);
-            setIsAuthenticating(false);
+            console.error(exception)
             setShowErrorToast(true);
         }
     }
 
-
     return (
         <IonPage>
+            <IonHeader>
+                <IonToolbar>
+                    <IonButtons slot="start">
+                        <IonBackButton defaultHref="/login"></IonBackButton>
+                    </IonButtons>
+                    <IonTitle>Registrering</IonTitle>
+                </IonToolbar>
+            </IonHeader>
             <IonContentStyled>
                 <CenterContainer>
-                    <PageTitle>TDSGram</PageTitle>
                     <LoginCard>
                         <IonList>
                             <IonItem>
@@ -66,27 +70,20 @@ const Login = () => {
                             </IonItem>
                         </IonList>
                     </LoginCard>
-                    <LoginButton onClick={authenticateUser}>
-                        {
-                            isAuthenticating ?
-                                <IonSpinner name="crescent"/> :
-                                <IonIcon icon={arrowForwardCircle}/>
-                        }
-                    </LoginButton>
-                    <RegisterButton onClick={() => history.push("/register")}>
-                        Registrer profil
+                    <RegisterButton onClick={registerUser}>
+                        <IonIcon icon={personAddOutline}/>
                     </RegisterButton>
                 </CenterContainer>
-                <IonToast
+                {<IonToast
                     isOpen={showErrorToast}
                     onDidDismiss={() => setShowErrorToast(false)}
-                    message={"Feil brukernavn/passord!"}
+                    message={"Du må fylle inn skjemaet først"}
                     duration={3000}
-                    color="warning"/>
+                    color="warning"/> }
             </IonContentStyled>
         </IonPage>
     )
-};
+}
 
 const LoginCard = styled(IonCard)`
   padding: 10px;
@@ -98,23 +95,10 @@ const IonContentStyled = styled(IonContent)`
   background-size: cover;
 `;
 
-const PageTitle = styled.h1`
-  font-size: 3rem;
-  align-self: center;
-  color: black;
-  font-family: 'Quicksand', sans-serif;
-`;
-
-const LoginButton = styled(IonFabButton)`
+const RegisterButton = styled(IonFabButton)`
   --background: #37323E;
   align-self: center;
-`;
-
-const RegisterButton = styled(IonButton)`
-  --background: none;
-  align-self: center;
-  margin-top:100px;
-  color: gray;
+  margin-top:20px;
 `;
 
 const CenterContainer = styled.div`
@@ -124,5 +108,4 @@ const CenterContainer = styled.div`
     height: 100%;
 `;
 
-// #37323E    #662C91
-export default Login;
+export default Register;

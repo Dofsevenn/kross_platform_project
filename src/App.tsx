@@ -1,5 +1,5 @@
 import React from 'react';
-import { Redirect, Route } from 'react-router-dom';
+import {Redirect, Route, Switch} from 'react-router-dom';
 import { IonApp, IonRouterOutlet } from '@ionic/react';
 import { IonReactRouter } from '@ionic/react-router';
 import {NhostAuthProvider, NhostApolloProvider} from "react-nhost";
@@ -28,6 +28,7 @@ import '@ionic/react/css/display.css';
 /* Theme variables */
 import './theme/variables.css';
 import PrivateRoute from "./components/PrivateRoute";
+import Register from "./pages/Register";
 
 const App: React.FC = () => (
     <NhostAuthProvider auth={auth}>
@@ -36,6 +37,7 @@ const App: React.FC = () => (
             <IonReactRouter>
             <IonRouterOutlet>
                 <Route path="/login" component={Login} exact={true}/>
+                <Route path="/register" component={Register} exact={true}/>
                 <Route path="/home" component={Home} exact={true} />
                 <PrivateRoute path="/newPost" component={NewPost} exact={true} />
                 <Route path="/detail/:id" component={Detail} exact={true} />
