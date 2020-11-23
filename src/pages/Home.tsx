@@ -18,6 +18,7 @@ import {useSubscription} from "@apollo/client";
 import styled from "styled-components";
 import {exitOutline, logInOutline, personAddOutline} from 'ionicons/icons';
 import {auth} from "../utils/nhost";
+import ITripList from "../modules/ITripList";
 
 const GET_TRIPS = gql`
     subscription {
@@ -40,8 +41,7 @@ const GET_TRIPS = gql`
 const Home = () => {
     let history = useHistory();
 
-    const {loading, error, data } = useSubscription<any>(GET_TRIPS,
-        { fetchPolicy: 'no-cache', });
+    const {loading, error, data } = useSubscription<ITripList>(GET_TRIPS);
 
     if (loading) {
         return <IonLabel>Laster...</IonLabel>
@@ -67,14 +67,14 @@ const Home = () => {
                     <IonButtons slot="start">
                         <IonBackButton defaultHref="/welcome"/>
                     </IonButtons>
-                    <IonTitle>POST FEED</IonTitle>
+                    <IonTitle>TURER</IonTitle>
                     {
                         (auth.isAuthenticated() === true) &&
                         <IonButtons slot="end">
                             <IonButton onClick={logout}>
                                 <IonIcon icon={exitOutline}></IonIcon>
                             </IonButton>
-                            <PictureButton onClick={() => history.push("/newPost")}>Ny post</PictureButton>
+                            <NewTripButton onClick={() => history.push("/newPost")}>Ny post</NewTripButton>
                         </IonButtons>
 
                     }
@@ -109,7 +109,7 @@ const Home = () => {
     );
 };
 
-const PictureButton = styled(IonButton)`
+const NewTripButton = styled(IonButton)`
   &::part(native) {
     background-color: darkgreen;
     border-radius: 5px;

@@ -133,7 +133,7 @@ const Detail= (props: any) => {
                     <IonButtons slot="start">
                         <IonBackButton defaultHref="/home" />
                     </IonButtons>
-                    <IonTitle>POST</IonTitle>
+                    <IonTitle>TUR</IonTitle>
                     {
                         (auth.isAuthenticated() === true) &&
                         <IonButtons slot="end">
