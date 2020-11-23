@@ -7,7 +7,7 @@ interface IPost {
     image_filename: string;
     user: {
         id: string;
-        display_name: string
+        display_name: string;
     };
     comments?: IComments[];
 

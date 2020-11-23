@@ -17,26 +17,22 @@ import gql from 'graphql-tag';
 import {useSubscription} from "@apollo/client";
 import IPostList from "../modules/IPostList";
 import styled from "styled-components";
-import {exitOutline} from 'ionicons/icons';
+import {exitOutline, logInOutline, personAddOutline, trashOutline} from 'ionicons/icons';
 import {auth} from "../utils/nhost";
 
 const GET_POSTS = gql`
     subscription {
-        posts{
+        trips{
             id
             title
             description
+            start_point
+            trip_length
             image_filename
+            coordinates
             user{
                 id
                 display_name
-            }
-            comments{
-                id
-                text
-                user{
-                    display_name
-                }
             }
         }
     }
@@ -44,13 +40,16 @@ const GET_POSTS = gql`
 
 const Home = () => {
     let history = useHistory();
-    const {loading, data } = useSubscription<IPostList>(GET_POSTS,
+
+    const {loading, error, data } = useSubscription<any>(GET_POSTS,
         { fetchPolicy: 'no-cache', });
 
     if (loading) {
         return <IonLabel>Laster...</IonLabel>
     }
 
+    console.log(loading)
+    console.log(error)
     console.log(data)
 
     /*
@@ -120,20 +119,35 @@ const Home = () => {
             <IonHeader>
                 <IonToolbar>
                     <IonButtons slot="start">
-                        <IonButton onClick={logout}>
-                            <IonIcon icon={exitOutline}></IonIcon>
-                        </IonButton>
+                        <IonBackButton defaultHref="/welcome"/>
                     </IonButtons>
                     <IonTitle>POST FEED</IonTitle>
-                    <IonButtons slot="end">
-                        {/* <IonButton onClick={handleClick}> + </IonButton> */}
-                        <PictureButton onClick={() => history.push("/newPost")}>Ny post</PictureButton>
-                    </IonButtons>
+                    {
+                        (auth.isAuthenticated() === true) &&
+                        <IonButtons slot="end">
+                            <IonButton onClick={logout}>
+                                <IonIcon icon={exitOutline}></IonIcon>
+                            </IonButton>
+                            <PictureButton onClick={() => history.push("/newPost")}>Ny post</PictureButton>
+                        </IonButtons>
+
+                    }
+                    {
+                        (auth.isAuthenticated() === false) &&
+                        <IonButtons slot="end">
+                            <IonButton onClick={() => history.push("/login")}>
+                                <IonIcon icon={logInOutline}></IonIcon>
+                            </IonButton>
+                            <RegisterButton onClick={() => history.push("/register")}>
+                                <IonIcon icon={personAddOutline}/>
+                            </RegisterButton>
+                        </IonButtons>
+                    }
                 </IonToolbar>
             </IonHeader>
             <IonContent fullscreen>
                 {
-                    data?.posts.map(post => (
+                    data?.trips.map((post: any) => (
                         <Link style={{textDecoration:'none'}} key={post.id} to={{
                             pathname:`/detail/${post.id}`,
                             state: {
@@ -155,6 +169,10 @@ const PictureButton = styled(IonButton)`
     border-radius: 5px;
     color: white;
   }
+`;
+
+const RegisterButton = styled(IonButton)`
+    padding-left: 10px;
 `;
 
 export default Home;

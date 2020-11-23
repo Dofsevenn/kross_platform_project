@@ -15,7 +15,7 @@ import PostCard from "../components/postCard";
 import IPost from "../modules/IPost";
 import ICommentList from "../modules/ICommentList";
 import CommentsCard from "../components/CommentsCard";
-import {trashOutline} from "ionicons/icons";
+import {exitOutline, logInOutline, personAddOutline, trashOutline} from "ionicons/icons";
 import {auth} from "../utils/nhost";
 import {gql} from "@apollo/client/core";
 import {useMutation, useSubscription} from "@apollo/client";
@@ -115,6 +115,16 @@ const Detail= (props: any) => {
             console.warn(e)
         }
     }
+
+    const logout = async () => {
+        try {
+            await auth.logout();
+            history.replace("/login")
+        } catch (e) {
+            alert("Something went wrong. You are not logged out")
+        }
+    }
+
     // Kode opp bruker registrering som øvelse til neste gang
     return(
         <IonPage>
@@ -125,12 +135,27 @@ const Detail= (props: any) => {
                     </IonButtons>
                     <IonTitle>POST</IonTitle>
                     {
-                        post.user.id === auth.getClaim('x-hasura-user-id') &&
-                            <IonButtons slot="end">
-                                <IonButton onClick={deletePost}>
-                                    <IonIcon icon={trashOutline}/>
-                                </IonButton>
-                            </IonButtons>
+                        (auth.isAuthenticated() === true) &&
+                        <IonButtons slot="end">
+                            <IonButton onClick={logout}>
+                                <IonIcon icon={exitOutline}></IonIcon>
+                            </IonButton>
+                            <IonButton onClick={deletePost}>
+                                <IonIcon icon={trashOutline}/>
+                            </IonButton>
+                        </IonButtons>
+
+                    }
+                    {
+                        (auth.isAuthenticated() === false) &&
+                        <IonButtons slot="end">
+                            <IonButton onClick={() => history.push("/login")}>
+                                <IonIcon icon={logInOutline}></IonIcon>
+                            </IonButton>
+                            <RegisterButton onClick={() => history.push("/register")}>
+                                <IonIcon icon={personAddOutline}/>
+                            </RegisterButton>
+                        </IonButtons>
                     }
                 </IonToolbar>
             </IonHeader>
@@ -160,6 +185,10 @@ const Detail= (props: any) => {
         </IonPage>
     )
 }
+
+const RegisterButton = styled(IonButton)`
+    padding-left: 10px;
+`;
 
 export default Detail;
 

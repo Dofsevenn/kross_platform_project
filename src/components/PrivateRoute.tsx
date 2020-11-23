@@ -8,6 +8,7 @@ type PrivateRouteProps = {
     exact: boolean;
 };
 
+// For at kun brukere som er logget inn skal kunne gå til denne siden
 const PrivateRoute = ({component, path, exact}: PrivateRouteProps) => {
     const { signedIn } = useAuth();
 

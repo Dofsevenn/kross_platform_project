@@ -92,7 +92,7 @@ const NewPost = () => {
             await insertPostMutation({
                 variables: {
                     post: { // Hvis variabelnavnet og navnet på variabelen vi henter data fra er like så trenger
-                            // vi ikke skrive title: title, emn kan kun skrive title som under
+                            // vi ikke skrive title: title, men kan kun skrive title som under
                         title,
                         description,
                         image_filename: filename,

@@ -1,26 +1,23 @@
-import React, {useState} from 'react';
+import React, {useState} from "react";
 import {
-    IonButton,
+    IonBackButton,
+    IonButton, IonButtons,
     IonCard,
     IonContent,
-    IonFabButton,
+    IonFabButton, IonHeader,
     IonIcon,
     IonInput,
     IonItem,
     IonList,
     IonPage,
-    IonSpinner,
-    IonToast,
+    IonSpinner, IonTitle,
+    IonToast, IonToolbar,
     useIonViewWillEnter
 } from "@ionic/react";
+import {useHistory} from "react-router";
 import {auth} from "../utils/nhost";
-import {useHistory} from "react-router-dom";
-import styled from "styled-components"
-import {arrowForwardCircle, text} from "ionicons/icons";
-import {renderToStaticMarkup} from "react-dom/server";
-import WaveBlob from "../components/WaveBlob";
-
-const waveBlobString = encodeURIComponent(renderToStaticMarkup(<WaveBlob/>))
+import {arrowForwardCircle, personAddOutline} from "ionicons/icons";
+import styled from "styled-components";
 
 const Login = () => {
     let history = useHistory()
@@ -28,12 +25,6 @@ const Login = () => {
     const [password, setPassword] = useState<string>("");
     const [isAuthenticating, setIsAuthenticating] = useState<boolean>(false);
     const [showErrorToast, setShowErrorToast] = useState<boolean>(false);
-
-    useIonViewWillEnter(() => {
-        if (auth.isAuthenticated()) {
-            history.replace("/home");
-        }
-    })
 
     const authenticateUser = async () => {
         setIsAuthenticating(true);
@@ -48,12 +39,18 @@ const Login = () => {
         }
     }
 
-
     return (
         <IonPage>
+            <IonHeader>
+                <IonToolbar>
+                    <IonButtons slot="start">
+                        <IonBackButton defaultHref="/welcome"/>
+                    </IonButtons>
+                    <IonTitle>Login</IonTitle>
+                </IonToolbar>
+            </IonHeader>
             <IonContentStyled>
                 <CenterContainer>
-                    <PageTitle>TDSGram</PageTitle>
                     <LoginCard>
                         <IonList>
                             <IonItem>
@@ -74,7 +71,7 @@ const Login = () => {
                         }
                     </LoginButton>
                     <RegisterButton onClick={() => history.push("/register")}>
-                        Registrer profil
+                        <IonIcon icon={personAddOutline}/>
                     </RegisterButton>
                 </CenterContainer>
                 <IonToast
@@ -94,27 +91,18 @@ const LoginCard = styled(IonCard)`
 
 const IonContentStyled = styled(IonContent)`
   --background: none;
-  background: url("data:image/svg+xml,${waveBlobString}") no-repeat fixed;
+  background: url("assets/nordmarka.jpeg") no-repeat fixed;
   background-size: cover;
 `;
 
-const PageTitle = styled.h1`
-  font-size: 3rem;
-  align-self: center;
-  color: black;
-  font-family: 'Quicksand', sans-serif;
-`;
-
 const LoginButton = styled(IonFabButton)`
-  --background: #37323E;
   align-self: center;
 `;
 
 const RegisterButton = styled(IonButton)`
-  --background: none;
+  width: 75%;
   align-self: center;
-  margin-top:100px;
-  color: gray;
+  margin-top:70px;
 `;
 
 const CenterContainer = styled.div`
@@ -124,5 +112,4 @@ const CenterContainer = styled.div`
     height: 100%;
 `;
 
-// #37323E    #662C91
 export default Login;
