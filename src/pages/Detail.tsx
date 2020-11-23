@@ -11,7 +11,7 @@ import {
     IonTitle,
     IonToolbar
 } from "@ionic/react";
-import PostCard from "../components/postCard";
+
 import IPost from "../modules/IPost";
 import ICommentList from "../modules/ICommentList";
 import CommentsCard from "../components/CommentsCard";
@@ -21,6 +21,7 @@ import {gql} from "@apollo/client/core";
 import {useMutation, useSubscription} from "@apollo/client";
 import styled from "styled-components";
 import {useHistory} from "react-router-dom";
+import TripCard from '../components/tripCard';
 
 const GET_COMMENTS = gql`
     subscription getCommentsByPostID($post_id: Int!) {
@@ -67,7 +68,7 @@ const DELETE_POST = gql`
 const Detail= (props: any) => {
 
     let history = useHistory()
-    const post: IPost = props.location?.state?.post;
+    const trip: IPost = props.location?.state?.trip;
 
     const [comment, setComment] = useState<string>("");
     const [insertCommentMutation] = useMutation(INSERT_COMMENT);
@@ -75,12 +76,12 @@ const Detail= (props: any) => {
 
     const { loading, data } = useSubscription<ICommentList>(GET_COMMENTS, {
         variables: {
-            post_id: post?.id
+            post_id: trip?.id
         },
         fetchPolicy: "no-cache"
     });
 
-    if (!post) {
+    if (!trip) {
         return <div></div>
     }
 
@@ -91,7 +92,7 @@ const Detail= (props: any) => {
             await insertCommentMutation({
                 variables: {
                     comment: {
-                        post_id: post?.id,
+                        post_id: trip?.id,
                         user_id: auth.getClaim('x-hasura-user-id'),
                         text: comment
                     }
@@ -106,7 +107,7 @@ const Detail= (props: any) => {
         try {
             await deletePostMutation({
                 variables: {
-                    post_id: post.id
+                    post_id: trip.id
                 }
             })
             history.replace("/home"); //Den  går til home siden men rendrer ikke home siden..???
@@ -125,7 +126,6 @@ const Detail= (props: any) => {
         }
     }
 
-    // Kode opp bruker registrering som øvelse til neste gang
     return(
         <IonPage>
             <IonHeader>
@@ -160,11 +160,11 @@ const Detail= (props: any) => {
                 </IonToolbar>
             </IonHeader>
             <IonContent fullscreen>
-                <PostCard {...post} />
+                <TripCard {...trip} />
                 <IonCard>
                     <IonList>
                         {
-                            post?.comments?.map((comment, i) => (
+                            trip?.comments?.map((comment, i) => (
                                 <CommentsCard key={i} {...comment} />
                             ))
                         }

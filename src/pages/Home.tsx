@@ -3,24 +3,23 @@ import {
     IonButton,
     IonButtons,
     IonContent,
-    IonHeader, IonIcon,
+    IonHeader,
+    IonIcon,
     IonLabel,
     IonPage,
     IonTitle,
     IonToolbar
 } from '@ionic/react';
-import React, {useState} from 'react';
+import React from 'react';
 import {Link, useHistory} from "react-router-dom";
-import IPost from "../modules/IPost";
-import PostCard from "../components/postCard";
+import TripCard from "../components/tripCard";
 import gql from 'graphql-tag';
 import {useSubscription} from "@apollo/client";
-import IPostList from "../modules/IPostList";
 import styled from "styled-components";
-import {exitOutline, logInOutline, personAddOutline, trashOutline} from 'ionicons/icons';
+import {exitOutline, logInOutline, personAddOutline} from 'ionicons/icons';
 import {auth} from "../utils/nhost";
 
-const GET_POSTS = gql`
+const GET_TRIPS = gql`
     subscription {
         trips{
             id
@@ -41,7 +40,7 @@ const GET_POSTS = gql`
 const Home = () => {
     let history = useHistory();
 
-    const {loading, error, data } = useSubscription<any>(GET_POSTS,
+    const {loading, error, data } = useSubscription<any>(GET_TRIPS,
         { fetchPolicy: 'no-cache', });
 
     if (loading) {
@@ -51,59 +50,6 @@ const Home = () => {
     console.log(loading)
     console.log(error)
     console.log(data)
-
-    /*
-    const [posts, setPosts] = useState<IPost[]>(
-        [
-            {
-                id: 1,
-                title: "Fin tur på fjellet.",
-                description: "Hardangervidda var fantastisk i dag!",
-                userName: "Kjetil",
-                image: "assets/hardangervidda1.jpeg",
-                likes: 200,
-                comments: [{
-                    userName: "Kurt",
-                    text: "Det var nydelig, jeg vil og!",
-                    date: "4. juli 2020",
-                    profileImageUrl: "https://ionicframework.com/docs/demos/api/list/avatar-han.png"
-                    },
-                    {
-                        userName: "Ask",
-                        text: "Fantastic!",
-                        date: "19. juli 2020",
-                        profileImageUrl: "https://ionicframework.com/docs/demos/api/list/avatar-rey.png"
-                    }]
-            },
-            {
-                id: 2,
-                title: "Mye vind idag.",
-                description: "Hardangervidda var fantastisk i dag, men blåste litt!",
-                userName: "Oddvar",
-                image: "assets/Hardangervidda2.jpeg",
-                likes: 15,
-                comments: [{
-                    userName: "Arne",
-                    text: "Deilig, ingenting er som litt bris i fjeset!",
-                    date: "5. august 2020"
-                }]
-            }
-        ]
-    );
-
-    // How to add a object to the state with spread operator and wrapper function
-   const handleClick = () => {
-       const post = {
-            id: 3,
-            title: "En regnværsdag",
-            description: "Hardangervidda ruler",
-            userName: "Odny",
-            image: "assets/hein.jpg",
-            likes: 70,
-            comments: []
-        }
-        setPosts(posts => [post, ...posts])
-    } */
 
     const logout = async () => {
         try {
@@ -147,14 +93,14 @@ const Home = () => {
             </IonHeader>
             <IonContent fullscreen>
                 {
-                    data?.trips.map((post: any) => (
-                        <Link style={{textDecoration:'none'}} key={post.id} to={{
-                            pathname:`/detail/${post.id}`,
+                    data?.trips.map((trip: any) => (
+                        <Link style={{textDecoration:'none'}} key={trip.id} to={{
+                            pathname:`/detail/${trip.id}`,
                             state: {
-                                post
+                                trip
                             }
                         }}>
-                        <PostCard {...post} />
+                        <TripCard {...trip} />
                         </Link>
                     ))
                 }

@@ -2,9 +2,10 @@ import React from 'react';
 import {IonCard, IonCardContent, IonCardHeader, IonCardSubtitle, IonCardTitle} from "@ionic/react";
 import IPost from "../modules/IPost";
 import {storage} from "../utils/nhost";
+import ITrip from "../modules/ITrip";
 
 
-const PostCard = ({ id, description, title, user, image_filename}: IPost) => {
+const TripCard = ({ id, description, title, user, image_filename}: ITrip) => {
 
     return (
         <IonCard >
@@ -24,4 +25,4 @@ const PostCard = ({ id, description, title, user, image_filename}: IPost) => {
     )
 }
 
-export default PostCard;
+export default TripCard;
