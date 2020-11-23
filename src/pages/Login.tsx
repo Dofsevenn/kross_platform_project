@@ -46,7 +46,7 @@ const Login = () => {
                     <IonButtons slot="start">
                         <IonBackButton defaultHref="/welcome"/>
                     </IonButtons>
-                    <IonTitle>Login</IonTitle>
+                    <IonTitle>LOGIN</IonTitle>
                 </IonToolbar>
             </IonHeader>
             <IonContentStyled>

@@ -12,7 +12,6 @@ import {
     IonToolbar
 } from "@ionic/react";
 
-import IPost from "../modules/IPost";
 import ICommentList from "../modules/ICommentList";
 import CommentsCard from "../components/CommentsCard";
 import {exitOutline, logInOutline, personAddOutline, trashOutline} from "ionicons/icons";
@@ -25,8 +24,8 @@ import TripCard from '../components/tripCard';
 import ITrip from "../modules/ITrip";
 
 const GET_COMMENTS = gql`
-    subscription getCommentsByPostID($post_id: Int!) {
-        posts_by_pk(id: $post_id) {
+    subscription getCommentsByTripID($trip_id: Int!) {
+        trips_by_pk(id: $trip_id) {
             comments {
                 text
                 user {
@@ -41,7 +40,7 @@ const INSERT_COMMENT = gql`
     mutation InsertComment($comment: comments_insert_input!) {
         insert_comments_one(object: $comment) {
             user_id,
-            post_id,
+            trip_id,
             text
         }
     }
@@ -77,7 +76,7 @@ const Detail= (props: any) => {
 
     const { loading, data } = useSubscription<ICommentList>(GET_COMMENTS, {
         variables: {
-            post_id: trip?.id
+            trip_id: trip?.id
         },
         fetchPolicy: "no-cache"
     });
@@ -93,7 +92,7 @@ const Detail= (props: any) => {
             await insertCommentMutation({
                 variables: {
                     comment: {
-                        post_id: trip?.id,
+                        trip_id: trip?.id,
                         user_id: auth.getClaim('x-hasura-user-id'),
                         text: comment
                     }

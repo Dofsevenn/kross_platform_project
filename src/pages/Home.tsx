@@ -74,7 +74,7 @@ const Home = () => {
                             <IonButton onClick={logout}>
                                 <IonIcon icon={exitOutline}></IonIcon>
                             </IonButton>
-                            <NewTripButton onClick={() => history.push("/newPost")}>Ny post</NewTripButton>
+                            <NewTripButton onClick={() => history.push("/newTrip")}>Ny tur</NewTripButton>
                         </IonButtons>
 
                     }

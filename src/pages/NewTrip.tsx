@@ -18,7 +18,8 @@ import gql from "graphql-tag";
 import {useMutation} from "@apollo/client";
 import {useHistory} from "react-router-dom";
 
-// Alle Hooks i react må starte med ordet use. Denne kan være en egen fil og importeres der hvor den trengs
+// Her lager jeg en egen Hook som kan brukes andre steder i koden. Den må starte med ordet use slik som alle andre Hooks.
+// Denne er for å laste opp bilde og å vise opplastings progessjon
 const useImageUpload = () => {
     const [uploadProgress, setUploadProgress] = useState<number>(0);
 
@@ -39,9 +40,9 @@ const useImageUpload = () => {
     }
 }
 
-const INSERT_POST = gql`
-    mutation InsertPost($post: posts_insert_input!) {
-        insert_posts_one(object: $post) {
+const INSERT_TRIP = gql`
+    mutation InsertTrip($trip: trips_insert_input!) {
+        insert_trips_one(object: $trip) {
             title,
             user_id,
             description,
@@ -50,12 +51,12 @@ const INSERT_POST = gql`
     }
 `;
 
-const NewPost = () => {
+const NewTrip = () => {
 
     let history = useHistory()
 
     const {photo, getPhoto} = useCamera();
-    const [insertPostMutation] = useMutation(INSERT_POST)
+    const [insertTripMutation] = useMutation(INSERT_TRIP)
     const {startUploading, uploadProgress} = useImageUpload();
     const [title, setTitle] = useState<string>("");
     const [description, setDescription] = useState<string>("");
@@ -69,13 +70,8 @@ const NewPost = () => {
         });
         setFilename(`${Date.now().toString()}.jpeg`);
     };
-/*
-    const uploadImage = async () => {
-        await storage.putString(`/public/test1.jpeg`, (photo?.dataUrl as string),
-            "data_url", null, (pe: ProgressEvent) => {
-                console.log(pe.loaded);
-            });
-    } */
+
+    // Her bruker jeg startUploading funksjonen fra useImageUpload Hooken jeg laget lengre opp
     const uploadImage = async () => {
         if(photo?.dataUrl) {
             await startUploading({
@@ -87,11 +83,11 @@ const NewPost = () => {
         }
     }
 
-    const insertPost = async () => {
+    const insertTrip = async () => {
         try {
-            await insertPostMutation({
+            await insertTripMutation({
                 variables: {
-                    post: { // Hvis variabelnavnet og navnet på variabelen vi henter data fra er like så trenger
+                    trip: { // Hvis variabelnavnet og navnet på variabelen vi henter data fra er like så trenger
                             // vi ikke skrive title: title, men kan kun skrive title som under
                         title,
                         description,
@@ -113,12 +109,12 @@ const NewPost = () => {
                     <IonButtons slot="start">
                         <IonBackButton defaultHref="/home"/>
                     </IonButtons>
-                    <IonTitle>NYTT INNLEGG</IonTitle>
+                    <IonTitle>NY TUR</IonTitle>
                 </IonToolbar>
             </IonHeader>
             <IonContentStyled>
-                <LoginCard>
-                    <img src={photo?.dataUrl}/>
+                <NewTripCard>
+                    <img src={photo?.dataUrl} alt=""/>
                     <div>
                         <IonList>
                             <CustomItem>
@@ -128,11 +124,11 @@ const NewPost = () => {
                                 <IonInput placeholder="Beskrivelse" onIonInput={(e: any) => setDescription(e.target.value)}/>
                             </CustomItem>
                         </IonList>
-                        <PictureButton onClick={triggerCamera}>Ta Bilde</PictureButton>
-                        <PictureButton onClick={uploadImage}>Last opp bilde ({filename})</PictureButton>
-                        <PictureButton onClick={insertPost}>Legg til ny post</PictureButton>
+                        <NewTripButton onClick={triggerCamera}>Ta Bilde</NewTripButton>
+                        <NewTripButton onClick={uploadImage}>Last opp bilde ({filename})</NewTripButton>
+                        <NewTripButton onClick={insertTrip}>Legg til ny tur</NewTripButton>
                     </div>
-                </LoginCard>
+                </NewTripCard>
             </IonContentStyled>
         </IonPage>
     )
@@ -143,14 +139,14 @@ const CustomItem = styled(IonItem)`
     margin: 10px;
   `;
 
-const PictureButton = styled(IonButton)`
+const NewTripButton = styled(IonButton)`
     --background: darkgreen;
     --border-radius: 5px;
     color: white;
     margin: 10px;
 `;
 
-const LoginCard = styled(IonCard)`
+const NewTripCard = styled(IonCard)`
   padding: 10px;
   display: flex;
   flex-direction: column;
@@ -163,4 +159,4 @@ const IonContentStyled = styled(IonContent)`
     flex-direction: column;
 `;
 
-export default NewPost;
+export default NewTrip;

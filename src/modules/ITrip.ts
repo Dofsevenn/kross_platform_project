@@ -1,3 +1,4 @@
+import IComments from "./IComments";
 
 interface ITrip {
     id: number;
@@ -11,6 +12,7 @@ interface ITrip {
         id: string;
         display_name: string;
     };
+    comments?: IComments[];
 }
 
 export default ITrip;

@@ -1,45 +1,41 @@
 import React, {useState} from "react";
 import {
-    IonBackButton,
-    IonButton,
+    IonBackButton, IonButton,
     IonButtons,
-    IonCard,
-    IonContent,
-    IonFabButton,
-    IonHeader, IonIcon,
-    IonInput,
-    IonItem,
+    IonCard, IonContent,
+    IonFabButton, IonHeader,
+    IonIcon,
+    IonInput, IonItem,
     IonList,
-    IonPage,
-    IonTitle, IonToast,
-    IonToolbar
+    IonPage, IonSpinner, IonTitle,
+    IonToast,
+    IonToolbar, useIonViewWillEnter, useIonViewWillLeave
 } from "@ionic/react";
-import styled from "styled-components";
-
-import WaveBlob from "../components/WaveBlob";
-import {renderToStaticMarkup} from "react-dom/server";
 import {auth} from "../utils/nhost";
-import { personAddOutline} from "ionicons/icons";
-import {useHistory} from "react-router-dom";
-
-const waveBlobString = encodeURIComponent(renderToStaticMarkup(<WaveBlob/>))
-
+import {useHistory} from "react-router";
+import {arrowForwardCircle, logInOutline, personAddOutline} from "ionicons/icons";
+import styled from "styled-components";
+import {LoginData} from "nhost-js-sdk/dist/types";
 
 const Register = () => {
-
     let history = useHistory()
 
     const [emailAddress, setEmailAddress] = useState<string>("");
     const [password, setPassword] = useState<string>("");
     const [showErrorToast, setShowErrorToast] = useState<boolean>(false);
     const [showRegisterToast, setShowRegisterToast] = useState<boolean>(false);
-
-    // auth.register(email, password, { display_name: "Joe Doe" });
+    const [isAuthenticating, setIsAuthenticating] = useState<boolean>(false);
+    const [isRegister, setIsRegister] = useState<boolean>(false);
 
     const registerUser = async () => {
+        setIsRegister(true);
+        setIsAuthenticating(true);
         try {
             await auth.register(emailAddress, password);
+            await auth.login(emailAddress, password);
             history.replace("/home");
+            setIsRegister(false);
+            setIsAuthenticating(false);
             setShowRegisterToast(true);
         } catch (exception) {
             console.error(exception)
@@ -47,19 +43,19 @@ const Register = () => {
         }
     }
 
-    return (
+    return(
         <IonPage>
             <IonHeader>
                 <IonToolbar>
                     <IonButtons slot="start">
-                        <IonBackButton defaultHref="/login"></IonBackButton>
+                        <IonBackButton />
                     </IonButtons>
-                    <IonTitle>Registrering</IonTitle>
+                    <IonTitle>REGISTRERING</IonTitle>
                 </IonToolbar>
             </IonHeader>
             <IonContentStyled>
                 <CenterContainer>
-                    <LoginCard>
+                    <RegistrationCard>
                         <IonList>
                             <IonItem>
                                 <IonInput placeholder="Epost-adresse"
@@ -70,15 +66,22 @@ const Register = () => {
                                           onIonInput={(e: any) => setPassword(e.target.value)}></IonInput>
                             </IonItem>
                         </IonList>
-                    </LoginCard>
+                    </RegistrationCard>
                     <RegisterButton onClick={registerUser}>
-                        <IonIcon icon={personAddOutline}/>
+                        {
+                            isAuthenticating ?
+                                <IonSpinner name="crescent"/> :
+                                <IonIcon icon={personAddOutline}/>
+                        }
                     </RegisterButton>
+                    <LoginButton  onClick={() => history.push("/login")}>
+                        <IonIcon icon={logInOutline}></IonIcon>
+                    </LoginButton>
                 </CenterContainer>
                 {<IonToast
                     isOpen={showErrorToast}
                     onDidDismiss={() => setShowErrorToast(false)}
-                    message={"Du må fylle ut skjemaet først, eventuelt bruker eksisterer allerede."}
+                    message={"Du må fylle ut skjemaet først, eventuelt så eksisterer bruker allerede."}
                     duration={3000}
                     color="warning"/> }
                 {<IonToast
@@ -86,26 +89,30 @@ const Register = () => {
                     onDidDismiss={() => setShowRegisterToast(false)}
                     message={"Registrering var vellykket"}
                     duration={3000}
-                    color="warning"/> }
+                    color="success"/> }
             </IonContentStyled>
         </IonPage>
     )
 }
 
-const LoginCard = styled(IonCard)`
+const RegistrationCard = styled(IonCard)`
   padding: 10px;
 `;
 
 const IonContentStyled = styled(IonContent)`
   --background: none;
-  background: url("data:image/svg+xml,${waveBlobString}") no-repeat fixed;
+  background: url("assets/nordmarka.jpeg") no-repeat fixed;
   background-size: cover;
 `;
 
 const RegisterButton = styled(IonFabButton)`
-  --background: #37323E;
   align-self: center;
   margin-top:20px;
+`;
+const LoginButton = styled(IonButton)`
+  width: 75%;
+  align-self: center;
+  margin-top:70px;
 `;
 
 const CenterContainer = styled.div`
