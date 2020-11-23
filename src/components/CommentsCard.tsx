@@ -1,6 +1,5 @@
 import React from "react";
-import {IonAvatar, IonCard, IonItem, IonLabel, IonList} from "@ionic/react";
-import IPost from "../modules/IPost";
+import {IonAvatar, IonItem, IonLabel} from "@ionic/react";
 import IComments from "../modules/IComments";
 
 const CommentsCard = ({ id, text, user, profileImageUrl }: IComments) => {

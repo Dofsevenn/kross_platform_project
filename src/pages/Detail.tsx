@@ -14,7 +14,7 @@ import {
 
 import ICommentList from "../modules/ICommentList";
 import CommentsCard from "../components/CommentsCard";
-import {exitOutline, logInOutline, personAddOutline, trashOutline} from "ionicons/icons";
+import {exitOutline, logInOutline, personAddOutline, reload, trashOutline} from "ionicons/icons";
 import {auth} from "../utils/nhost";
 import {gql} from "@apollo/client/core";
 import {useMutation, useSubscription} from "@apollo/client";
@@ -46,19 +46,19 @@ const INSERT_COMMENT = gql`
     }
 `;
 
-const DELETE_POST = gql`
-    mutation DeletePost($post_id: Int!) {
+const DELETE_TRIP = gql`
+    mutation DeleteTrip($trip_id: Int!) {
         delete_comments(
             where: {
-                post_id: {
-                    _eq: $post_id
+                trip_id: {
+                    _eq: $trip_id
                 }
             }
         ) {
             affected_rows
         }
-        delete_posts_by_pk(
-            id: $post_id
+        delete_trips_by_pk(
+            id: $trip_id
         ) {
             id
         }
@@ -72,7 +72,7 @@ const Detail= (props: any) => {
 
     const [comment, setComment] = useState<string>("");
     const [insertCommentMutation] = useMutation(INSERT_COMMENT);
-    const [deletePostMutation] = useMutation(DELETE_POST);
+    const [deleteTripMutation] = useMutation(DELETE_TRIP);
 
     const { loading, data } = useSubscription<ICommentList>(GET_COMMENTS, {
         variables: {
@@ -103,11 +103,11 @@ const Detail= (props: any) => {
         }
     }
 
-    const deletePost = async () => {
+    const deleteTrip = async () => {
         try {
-            await deletePostMutation({
+            await deleteTripMutation({
                 variables: {
-                    post_id: trip.id
+                    trip_id: trip.id
                 }
             })
             history.replace("/home"); //Den  går til home siden men rendrer ikke home siden..???
@@ -140,7 +140,7 @@ const Detail= (props: any) => {
                             <IonButton onClick={logout}>
                                 <IonIcon icon={exitOutline}></IonIcon>
                             </IonButton>
-                            <IonButton onClick={deletePost}>
+                            <IonButton onClick={deleteTrip}>
                                 <IonIcon icon={trashOutline}/>
                             </IonButton>
                         </IonButtons>
@@ -162,13 +162,13 @@ const Detail= (props: any) => {
             <IonContent fullscreen>
                 <TripCard {...trip} />
                 <IonCard>
-                    {/*<IonList>
+                    <IonList>
                         {
                             trip?.comments?.map((comment, i) => (
                                 <CommentsCard key={i} {...comment} />
                             ))
                         }
-                    </IonList> */}
+                    </IonList>
                 </IonCard>
                 <IonCard>
                     <IonList>

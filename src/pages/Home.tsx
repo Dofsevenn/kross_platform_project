@@ -8,7 +8,7 @@ import {
     IonLabel,
     IonPage,
     IonTitle,
-    IonToolbar
+    IonToolbar, useIonViewWillEnter
 } from '@ionic/react';
 import React from 'react';
 import {Link, useHistory} from "react-router-dom";
@@ -33,6 +33,14 @@ const GET_TRIPS = gql`
             user{
                 id
                 display_name
+            }
+            comments{
+                id
+                text
+                user{
+                    id  
+                    display_name
+                }
             }
         }
     }
