@@ -22,6 +22,7 @@ import {useMutation, useSubscription} from "@apollo/client";
 import styled from "styled-components";
 import {useHistory} from "react-router-dom";
 import TripCard from '../components/tripCard';
+import ITrip from "../modules/ITrip";
 
 const GET_COMMENTS = gql`
     subscription getCommentsByPostID($post_id: Int!) {
@@ -68,7 +69,7 @@ const DELETE_POST = gql`
 const Detail= (props: any) => {
 
     let history = useHistory()
-    const trip: IPost = props.location?.state?.trip;
+    const trip: ITrip = props.location?.state?.trip;
 
     const [comment, setComment] = useState<string>("");
     const [insertCommentMutation] = useMutation(INSERT_COMMENT);
@@ -162,13 +163,13 @@ const Detail= (props: any) => {
             <IonContent fullscreen>
                 <TripCard {...trip} />
                 <IonCard>
-                    <IonList>
+                    {/*<IonList>
                         {
                             trip?.comments?.map((comment, i) => (
                                 <CommentsCard key={i} {...comment} />
                             ))
                         }
-                    </IonList>
+                    </IonList> */}
                 </IonCard>
                 <IonCard>
                     <IonList>
