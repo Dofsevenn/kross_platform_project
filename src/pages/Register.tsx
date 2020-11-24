@@ -22,6 +22,7 @@ const Register = () => {
 
     const [emailAddress, setEmailAddress] = useState<string>("");
     const [password, setPassword] = useState<string>("");
+    const [userName, setUserName] = useState<string>("");
     const [showErrorToast, setShowErrorToast] = useState<boolean>(false);
     const [showRegisterToast, setShowRegisterToast] = useState<boolean>(false);
     const [isAuthenticating, setIsAuthenticating] = useState<boolean>(false);
@@ -31,7 +32,7 @@ const Register = () => {
         setIsRegister(true);
         setIsAuthenticating(true);
         try {
-            await auth.register(emailAddress, password);
+            await auth.register(emailAddress, password, {display_name: userName});
             await auth.login(emailAddress, password);
             history.replace("/home");
             setIsRegister(false);
@@ -58,12 +59,16 @@ const Register = () => {
                     <RegistrationCard>
                         <IonList>
                             <IonItem>
+                                <IonInput placeholder="Brukernavn"
+                                          onIonInput={(e: any) => setUserName(e.target.value)} />
+                            </IonItem>
+                            <IonItem>
                                 <IonInput placeholder="Epost-adresse"
-                                          onIonInput={(e: any) => setEmailAddress(e.target.value)}></IonInput>
+                                          onIonInput={(e: any) => setEmailAddress(e.target.value)} />
                             </IonItem>
                             <IonItem>
                                 <IonInput placeholder="Passord" type="password"
-                                          onIonInput={(e: any) => setPassword(e.target.value)}></IonInput>
+                                          onIonInput={(e: any) => setPassword(e.target.value)} />
                             </IonItem>
                         </IonList>
                     </RegistrationCard>

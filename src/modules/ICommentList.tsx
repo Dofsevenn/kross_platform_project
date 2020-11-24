@@ -2,7 +2,9 @@ import IComments from "./IComments";
 
 
 interface ICommentList {
-    comments?: IComments[];
+    trips_by_pk:{
+        comments?: IComments[];
+    }
 }
 
 export default ICommentList;

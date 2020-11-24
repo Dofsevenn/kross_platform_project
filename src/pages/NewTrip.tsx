@@ -7,7 +7,7 @@ import {
     IonCard,
     IonContent,
     IonHeader, IonInput, IonItem, IonList,
-    IonPage,
+    IonPage, IonProgressBar,
     IonTitle,
     IonToolbar
 } from "@ionic/react";
@@ -96,7 +96,7 @@ const NewTrip = () => {
                     }
                 }
             });
-            history.replace("/home"); //Den  går til home siden men rendrer ikke home siden..???
+           // history.replace("/home"); //Den  går til home siden men rendrer ikke home siden..???
         } catch (e) {
             console.log(e);
         }
@@ -127,6 +127,7 @@ const NewTrip = () => {
                         <NewTripButton onClick={triggerCamera}>Ta Bilde</NewTripButton>
                         <NewTripButton onClick={uploadImage}>Last opp bilde ({filename})</NewTripButton>
                         <NewTripButton onClick={insertTrip}>Legg til ny tur</NewTripButton>
+                        <IonProgressBar value={uploadProgress}></IonProgressBar>
                     </div>
                 </NewTripCard>
             </IonContentStyled>

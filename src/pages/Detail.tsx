@@ -164,9 +164,12 @@ const Detail= (props: any) => {
                 <IonCard>
                     <IonList>
                         {
-                            trip?.comments?.map((comment, i) => (
+                            data?.trips_by_pk?.comments?.map((comment, i) => (
                                 <CommentsCard key={i} {...comment} />
                             ))
+                            /*trip?.comments?.map((comment, i) => (
+                                <CommentsCard key={i} {...comment} />
+                            )) */
                         }
                     </IonList>
                 </IonCard>
