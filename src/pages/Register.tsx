@@ -23,24 +23,31 @@ const Register = () => {
     const [emailAddress, setEmailAddress] = useState<string>("");
     const [password, setPassword] = useState<string>("");
     const [userName, setUserName] = useState<string>("");
-    const [showErrorToast, setShowErrorToast] = useState<boolean>(false);
-    const [showRegisterToast, setShowRegisterToast] = useState<boolean>(false);
-    const [isAuthenticating, setIsAuthenticating] = useState<boolean>(false);
-    const [isRegister, setIsRegister] = useState<boolean>(false);
+    const [toastMessage, setToastMessage] = useState<string>("");
+    const [toastColor, setToastColor] = useState<string>("");
+    const [showToast, setShowToast] = useState<boolean>(false);
+    const [isRegistering, setIsRegistering] = useState<boolean>(false);
 
     const registerUser = async () => {
-        setIsRegister(true);
-        setIsAuthenticating(true);
+        setIsRegistering(true);
         try {
             await auth.register(emailAddress, password, {display_name: userName});
+            setIsRegistering(false);
+            setToastColor("success")
+            setToastMessage("Registrering var vellykket");
+            setShowToast(true);
             await auth.login(emailAddress, password);
-            history.replace("/home");
-            setIsRegister(false);
-            setIsAuthenticating(false);
-            setShowRegisterToast(true);
+            setTimeout(() => { // Har timeout for å være sikker på at autentiseringen har skjedd.
+                    history.replace("/home");
+                },
+                3200
+            )
         } catch (exception) {
             console.error(exception)
-            setShowErrorToast(true);
+            setToastColor("warning")
+            setToastMessage("Du må fylle ut skjemaet først, eventuelt så eksisterer bruker allerede.");
+            setShowToast(true);
+            setIsRegistering(false);
         }
     }
 
@@ -74,7 +81,7 @@ const Register = () => {
                     </RegistrationCard>
                     <RegisterButton onClick={registerUser}>
                         {
-                            isAuthenticating ?
+                            isRegistering ?
                                 <IonSpinner name="crescent"/> :
                                 <IonIcon icon={personAddOutline}/>
                         }
@@ -83,18 +90,12 @@ const Register = () => {
                         <IonIcon icon={logInOutline}></IonIcon>
                     </LoginButton>
                 </CenterContainer>
-                {<IonToast
-                    isOpen={showErrorToast}
-                    onDidDismiss={() => setShowErrorToast(false)}
-                    message={"Du må fylle ut skjemaet først, eventuelt så eksisterer bruker allerede."}
+                { <IonToast
+                    isOpen={showToast}
+                    onDidDismiss={() => setShowToast(false)}
+                    message={toastMessage}
                     duration={3000}
-                    color="warning"/> }
-                {<IonToast
-                    isOpen={showRegisterToast}
-                    onDidDismiss={() => setShowRegisterToast(false)}
-                    message={"Registrering var vellykket"}
-                    duration={3000}
-                    color="success"/> }
+                    color={toastColor}/> }
             </IonContentStyled>
         </IonPage>
     )

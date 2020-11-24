@@ -2,7 +2,7 @@ import {
     IonBackButton,
     IonButton,
     IonButtons,
-    IonContent,
+    IonContent, IonFooter,
     IonHeader,
     IonIcon,
     IonLabel,
@@ -10,7 +10,7 @@ import {
     IonTitle,
     IonToolbar, useIonViewWillEnter
 } from '@ionic/react';
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {Link, useHistory} from "react-router-dom";
 import TripCard from "../components/tripCard";
 import gql from 'graphql-tag';
@@ -50,6 +50,8 @@ const Home = () => {
     let history = useHistory();
 
     const {loading, error, data } = useSubscription<ITripList>(GET_TRIPS);
+    const [weather, setWeather] = useState({})
+    const [count, setCount] = useState(0)
 
     if (loading) {
         return <IonLabel>Laster...</IonLabel>
@@ -58,6 +60,13 @@ const Home = () => {
     console.log(loading)
     console.log(error)
     console.log(data)
+
+    /*
+    useEffect(() =>
+        fetch("https://api.met.no/weatherapi/locationforecast/2.0/compact?lat=\(lat)&lon=\(lon)#")
+            .then(res => res.json())
+            .then(setWeather),
+            [count]) */
 
     const logout = async () => {
         try {
@@ -70,7 +79,7 @@ const Home = () => {
 
     return (
         <IonPage>
-            <IonHeader>
+             <IonHeader>
                 <IonToolbar>
                     <IonButtons slot="start">
                         <IonBackButton defaultHref="/welcome"/>
@@ -99,7 +108,7 @@ const Home = () => {
                     }
                 </IonToolbar>
             </IonHeader>
-            <IonContent fullscreen>
+            <IonContent >
                 {
                     data?.trips.map((trip: any) => (
                         <Link style={{textDecoration:'none'}} key={trip.id} to={{
@@ -113,6 +122,10 @@ const Home = () => {
                     ))
                 }
             </IonContent>
+            {/*
+            <IonFooter>
+                <IonButton onClick={() => setCount(count + 1)}>Fetch weather</IonButton>
+            </IonFooter> */}
         </IonPage>
     );
 };

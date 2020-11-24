@@ -22,6 +22,7 @@ import styled from "styled-components";
 import {useHistory} from "react-router-dom";
 import TripCard from '../components/tripCard';
 import ITrip from "../modules/ITrip";
+import jQuery from 'jquery';
 
 const GET_COMMENTS = gql`
     subscription getCommentsByTripID($trip_id: Int!) {
@@ -98,6 +99,7 @@ const Detail= (props: any) => {
                     }
                 }
             })
+            jQuery("ion-input").prop("value", "");
         } catch (e) {
             console.warn(e);
         }
@@ -110,10 +112,15 @@ const Detail= (props: any) => {
                     trip_id: trip.id
                 }
             })
-            history.replace("/home"); //Den  går til home siden men rendrer ikke home siden..???
-
         } catch (e) {
             console.warn(e)
+        } finally {
+            setTimeout(() => {
+                    history.goBack(); // .goBack fungerer her, men ikke .replace. Det gir ikke helt mening for meg at
+                    // ikke .replace fungerer, men .replace ga kun svart skjerm
+                },
+                300
+            )
         }
     }
 
@@ -167,9 +174,6 @@ const Detail= (props: any) => {
                             data?.trips_by_pk?.comments?.map((comment, i) => (
                                 <CommentsCard key={i} {...comment} />
                             ))
-                            /*trip?.comments?.map((comment, i) => (
-                                <CommentsCard key={i} {...comment} />
-                            )) */
                         }
                     </IonList>
                 </IonCard>

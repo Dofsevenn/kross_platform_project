@@ -8,7 +8,7 @@ import {
     IonContent,
     IonHeader, IonInput, IonItem, IonList,
     IonPage, IonProgressBar,
-    IonTitle,
+    IonTitle, IonToast,
     IonToolbar
 } from "@ionic/react";
 import {CameraResultType} from "@capacitor/core";
@@ -17,6 +17,8 @@ import {auth, storage} from "../utils/nhost";
 import gql from "graphql-tag";
 import {useMutation} from "@apollo/client";
 import {useHistory} from "react-router-dom";
+import ShowToast from "../components/ShowToast";
+
 
 // Her lager jeg en egen Hook som kan brukes andre steder i koden. Den må starte med ordet use slik som alle andre Hooks.
 // Denne er for å laste opp bilde og å vise opplastings progessjon
@@ -61,6 +63,9 @@ const NewTrip = () => {
     const [title, setTitle] = useState<string>("");
     const [description, setDescription] = useState<string>("");
     const [filename, setFilename] = useState<string>("");
+    const [toastMessage, setToastMessage] = useState<string>("");
+    const [toastColor, setToastColor] = useState<string>("");
+    const [showToast, setShowToast] = useState<boolean>(false);
 
     const triggerCamera = async () => {
         await getPhoto({
@@ -83,8 +88,11 @@ const NewTrip = () => {
         }
     }
 
+    // Kjører uploadImage() her for å slippe å legge til bildet i databasen med egen knapp. Det er mer logist at man
+    // laster opp bildet i samme knapp som å legge til tur
     const insertTrip = async () => {
         try {
+            await uploadImage()
             await insertTripMutation({
                 variables: {
                     trip: { // Hvis variabelnavnet og navnet på variabelen vi henter data fra er like så trenger
@@ -96,9 +104,14 @@ const NewTrip = () => {
                     }
                 }
             });
-           // history.replace("/home"); //Den  går til home siden men rendrer ikke home siden..???
         } catch (e) {
             console.log(e);
+        } finally {
+            setTimeout(() => {
+                history.goBack(); //Den  går til home siden men rendrer ikke home siden..???
+            },
+                300
+        )
         }
     }
 
@@ -125,12 +138,12 @@ const NewTrip = () => {
                             </CustomItem>
                         </IonList>
                         <NewTripButton onClick={triggerCamera}>Ta Bilde</NewTripButton>
-                        <NewTripButton onClick={uploadImage}>Last opp bilde ({filename})</NewTripButton>
                         <NewTripButton onClick={insertTrip}>Legg til ny tur</NewTripButton>
-                        <IonProgressBar value={uploadProgress}></IonProgressBar>
+                        <IonProgressBar value={uploadProgress}/>
                     </div>
                 </NewTripCard>
             </IonContentStyled>
+            {/* <ShowToast .showToast, toastMessage, toastColor /> */}
         </IonPage>
     )
 };
