@@ -118,6 +118,8 @@ const Detail= (props: any) => {
             setTimeout(() => {
                     history.goBack(); // .goBack fungerer her, men ikke .replace. Det gir ikke helt mening for meg at
                     // ikke .replace fungerer, men .replace ga kun svart skjerm
+                    // Virker som at det er visse situasjoner hvor den ikke oppdaterer riktig med .goBack også, men
+                    // skjermen blir iallfall ikke svart.
                 },
                 300
             )

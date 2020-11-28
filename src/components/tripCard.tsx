@@ -10,7 +10,7 @@ const TripCard = ({ id, description, title, user, image_filename}: ITrip) => {
              <img src={`https://backend-iw3hrary.nhost.app/storage/o/public/${image_filename}`} width="400" height="300" alt=""/>
             <IonCardHeader>
                 <IonCardSubtitle>
-                    @ {user.display_name} &bull; ? likes
+                    @ {user.display_name} &bull; {/*? likes     Hadde tenkt å legge til likes, men ble ikke tid*/}
                 </IonCardSubtitle>
                 <IonCardTitle>
                     {title}

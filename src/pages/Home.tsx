@@ -82,7 +82,7 @@ const Home = () => {
              <IonHeader>
                 <IonToolbar>
                     <IonButtons slot="start">
-                        <IonBackButton defaultHref="/welcome"/>
+                        <IonBackButton defaultHref="/welcome"/> {/* Må teste .md og .ios */}
                     </IonButtons>
                     <IonTitle>TURER</IonTitle>
                     {
@@ -131,10 +131,11 @@ const Home = () => {
 };
 
 const NewTripButton = styled(IonButton)`
-  &::part(native) {
+  &::part(native) { // To target an element inside of a shadow tree from the outside. I wanted to try it, and it works
     background-color: darkgreen;
     border-radius: 5px;
     color: white;
+    padding-left: 10px;
   }
 `;
 
