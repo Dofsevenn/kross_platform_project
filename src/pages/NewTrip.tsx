@@ -6,9 +6,14 @@ import {
     IonButtons,
     IonCard,
     IonContent,
-    IonHeader, IonInput, IonItem, IonList,
-    IonPage, IonProgressBar,
-    IonTitle, IonToast,
+    IonHeader,
+    IonInput,
+    IonItem,
+    IonList,
+    IonPage,
+    IonProgressBar,
+    IonTitle,
+    IonToast,
     IonToolbar
 } from "@ionic/react";
 import {CameraResultType} from "@capacitor/core";
@@ -17,7 +22,6 @@ import {auth, storage} from "../utils/nhost";
 import gql from "graphql-tag";
 import {useMutation} from "@apollo/client";
 import {useHistory} from "react-router-dom";
-import ShowToast from "../components/ShowToast";
 
 
 // Her lager jeg en egen Hook som kan brukes andre steder i koden. Den må starte med ordet use slik som alle andre Hooks.
@@ -42,6 +46,8 @@ const useImageUpload = () => {
     }
 }
 
+// Hadde planer om å legge til mere info, men kom ikke lengre. Derfor er det flere rader i databasen en det er muligheter
+// til å legge til her.
 const INSERT_TRIP = gql`
     mutation InsertTrip($trip: trips_insert_input!) {
         insert_trips_one(object: $trip) {
@@ -106,9 +112,12 @@ const NewTrip = () => {
             });
         } catch (e) {
             console.log(e);
-        } finally {
+            setToastColor("warning")
+            setToastMessage("Noe gikk galt, prøv igjen.");
+            setShowToast(true);
+        } finally { // Trenger en timeout for å være sikker på at turen er lagt til før den går tilbake til home siden
             setTimeout(() => {
-                history.goBack(); //Den  går til home siden men rendrer ikke home siden..???
+                history.goBack();
             },
                 300
         )
@@ -143,7 +152,12 @@ const NewTrip = () => {
                     </div>
                 </NewTripCard>
             </IonContentStyled>
-            {/* <ShowToast .showToast, toastMessage, toastColor /> */}
+            { <IonToast
+                isOpen={showToast}
+                onDidDismiss={() => setShowToast(false)}
+                message={toastMessage}
+                duration={2000}
+                color={toastColor}/> }
         </IonPage>
     )
 };

@@ -1,9 +1,13 @@
 import React, {useState} from 'react';
 import {
-    IonAvatar, IonBackButton, IonButton, IonButtons,
+    IonBackButton,
+    IonButton,
+    IonButtons,
     IonCard,
     IonContent,
-    IonHeader, IonIcon, IonInput,
+    IonHeader,
+    IonIcon,
+    IonInput,
     IonItem,
     IonLabel,
     IonList,
@@ -14,7 +18,7 @@ import {
 
 import ICommentList from "../modules/ICommentList";
 import CommentsCard from "../components/CommentsCard";
-import {exitOutline, logInOutline, personAddOutline, reload, trashOutline} from "ionicons/icons";
+import {exitOutline, logInOutline, personAddOutline, trashOutline} from "ionicons/icons";
 import {auth} from "../utils/nhost";
 import {gql} from "@apollo/client/core";
 import {useMutation, useSubscription} from "@apollo/client";
@@ -67,14 +71,17 @@ const DELETE_TRIP = gql`
 `;
 
 const Detail= (props: any) => {
-
     let history = useHistory()
+
+    // Lagrer dataene som blir sendt fra home siden i en variabel
     const trip: ITrip = props.location?.state?.trip;
 
     const [comment, setComment] = useState<string>("");
     const [insertCommentMutation] = useMutation(INSERT_COMMENT);
     const [deleteTripMutation] = useMutation(DELETE_TRIP);
 
+    // Henter kommentarer direkte fra databasen i stenden for å hente det gjennom home siden. Dette for å kunne
+    // oppdatere kommentarene med en gang det blir lagt til en ny
     const { loading, data } = useSubscription<ICommentList>(GET_COMMENTS, {
         variables: {
             trip_id: trip?.id
@@ -143,7 +150,8 @@ const Detail= (props: any) => {
                         <IonBackButton defaultHref="/home" />
                     </IonButtons>
                     <IonTitle>TUR</IonTitle>
-                    {
+                    { /* Denne koden sjekker displayer forskjellige ting i toolbaren avhengig om bruker er inlogget
+                    eller ikke*/
                         (auth.isAuthenticated() === true) &&
                         <IonButtons slot="end">
                             <IonButton onClick={logout}>
@@ -185,7 +193,8 @@ const Detail= (props: any) => {
                             <IonInput placeholder={"Skriv inn en kommentar"}
                                       onIonInput={(e:any) => setComment(e.target.value)}/>
                         </IonItem>
-                        <IonItem>
+                        <IonItem> {/* Hadde planer om å legge til avatar også, derfor vises det et lite felt til det
+                        i appen*/}
                             <IonButton onClick={insertComment}>Legg til kommentar</IonButton>
                         </IonItem>
                     </IonList>

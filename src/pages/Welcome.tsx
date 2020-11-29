@@ -10,25 +10,21 @@ import {useSubscription} from "@apollo/client";
 // TODO: Innslag av bruk av Styled Components
 
 // Ting som bør være med for god karakter:
-// TODO: Arbeidliste fredag!
-// TODO: Kunne legge til turer (NewTrip klassen)
-// TODO: Kunne registrere bruker til databasen (Hvis ikke det allerede funker da.)
-// TODO: Må kunne ta bilde og legge det til i listen og på turinfo (Tillegge, kunne legge til flere bilder på en tur)
-// TODO: Fillagring av blandt annet bilder
+// TODO: Arbeidliste søndag!
+// TODO: Rydde litt
+// TODO: OPPRETTE PROSJEKTET PÅ NYTT OG KOPIERE OVER ALLE FILER !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+// TODO: SJEKKE AT ALT FUGERER ELLERS FIKSE SÅ ALT FUNGERER!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+// TODO: Kommentere koden!!!
 
 // Bug fixes, eller som må skrives om i readme:
-// TODO: Når jeg går tilbake til inlogging etter å ha logget inn så redirigerer den meg tilbake til home. Men home
-//  siden oppdateres ikke, den blir svart
 
 // TODO: Arbeidsliste ubestemt tid:
 // TODO: GPS (Capasitor geolocation) for å få turens startpunkt
-// TODO: Tilbakemeldinger feedback bruker-interraksjon (feilmeldinger, loading-spinnere, m.m.)
 // TODO: Vurdering rating av turen -> Tenk IMDB
 // TODO: Fremvisning av turen med Google maps -> Kobles sammen emd api ---> Ta inn værappen fra ios?? (enkel versjon)
 // TODO: Bruk av eksterne API (Rest/ GraphQL) -> Kan kobles sammen med kart ---> Ta inn værappen fra ios?? (enkel versjon)
 
 // Hvis jeg har tid:
-// TODO: Bruk av npm moduler (npm install [pakkenavn] --save)
 // TODO: Implementasjon av Accessibility-prinsipper.
 
 const Welcome = () => {

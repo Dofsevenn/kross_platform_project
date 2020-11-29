@@ -1,21 +1,26 @@
 import React, {useState} from "react";
 import {
-    IonBackButton, IonButton,
+    IonBackButton,
+    IonButton,
     IonButtons,
-    IonCard, IonContent,
-    IonFabButton, IonHeader,
+    IonCard,
+    IonContent,
+    IonFabButton,
+    IonHeader,
     IonIcon,
-    IonInput, IonItem,
+    IonInput,
+    IonItem,
     IonList,
-    IonPage, IonSpinner, IonTitle,
+    IonPage,
+    IonSpinner,
+    IonTitle,
     IonToast,
-    IonToolbar, useIonViewWillEnter, useIonViewWillLeave
+    IonToolbar
 } from "@ionic/react";
 import {auth} from "../utils/nhost";
 import {useHistory} from "react-router";
-import {arrowForwardCircle, logInOutline, personAddOutline} from "ionicons/icons";
+import {logInOutline, personAddOutline} from "ionicons/icons";
 import styled from "styled-components";
-import {LoginData} from "nhost-js-sdk/dist/types";
 
 const Register = () => {
     let history = useHistory()
@@ -80,7 +85,7 @@ const Register = () => {
                         </IonList>
                     </RegistrationCard>
                     <RegisterButton onClick={registerUser}>
-                        {
+                        { /* en spinner hvis registeringen tar tid*/
                             isRegistering ?
                                 <IonSpinner name="crescent"/> :
                                 <IonIcon icon={personAddOutline}/>
@@ -107,7 +112,8 @@ const RegistrationCard = styled(IonCard)`
 
 const IonContentStyled = styled(IonContent)`
   --background: none;
-  background: url("assets/nordmarka.jpeg") no-repeat fixed;
+  background: url("assets/nordmarka.jpeg") no-repeat fixed; {/* Vet ikke hvorfor det er rød merket under denne, den 
+  fungerer som den skal både på web og mobil*/}
   background-size: cover;
 `;
 
