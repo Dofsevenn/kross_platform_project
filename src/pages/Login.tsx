@@ -30,7 +30,7 @@ const Login = () => {
         setIsAuthenticating(true);
         try {
             await auth.login(emailAddress, password);
-            history.push("/home"); // Har push her nå bare for enkelt å komme tilbake til login. Skal være .replace
+            history.replace("/home"); // Har push her nå bare for enkelt å komme tilbake til login. Skal være .replace
             setIsAuthenticating(false);
         } catch (exception) {
             console.log(exception);

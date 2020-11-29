@@ -61,19 +61,17 @@ const Home = () => {
     console.log(error)
     console.log(data)
 
-    /*
-    useEffect(() =>
-        fetch("https://api.met.no/weatherapi/locationforecast/2.0/compact?lat=\(lat)&lon=\(lon)#")
-            .then(res => res.json())
-            .then(setWeather),
-            [count]) */
-
     const logout = async () => {
         try {
             await auth.logout();
-            history.replace("/login")
         } catch (e) {
             alert("Something went wrong. You are not logged out")
+        }finally {
+            setTimeout(() => { // Har opplevd litt utstabilitet på om den viser login siden,
+                // derfor satte jeg på en timeout her.
+                    history.replace("/login")
+                }, 300
+            )
         }
     }
 
